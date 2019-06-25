@@ -1,26 +1,13 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
-import { Font } from 'expo'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
 import commonStyles from '../commonStyles'
 
 export default class Agenda extends Component {
-    state = {
-        fontLoaded: false
-    }
-    
-    async componentDidMount() {
-        await Font.loadAsync({
-            'Lato': require('../../assets/fonts/Lato.ttf')
-        })
-        this.setState({ fontLoaded: true })
-    }
-    
     render() {
         return (
-            this.state.fontLoaded ?
             <View style={styles.container}>
                 <ImageBackground
                     source={todayImage}
@@ -38,7 +25,6 @@ export default class Agenda extends Component {
                     <Text>Tarefa 3</Text>
                 </View>
             </View>
-            : null
         )
     }
 }
@@ -55,14 +41,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     title: {
-        fontFamily: commonStyles.fontFamily,
         color: commonStyles.colors.secondary,
         fontSize: 50,
         marginLeft: 20,
         marginBottom: 10
     },
     subtitle: {
-        fontFamily: commonStyles.fontFamily,
         color: commonStyles.colors.secondary,
         fontSize: 20,
         marginLeft: 20,
