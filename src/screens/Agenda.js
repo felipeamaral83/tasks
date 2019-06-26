@@ -15,6 +15,8 @@ import commonStyles from '../commonStyles'
 import * as Font from 'expo-font'
 import Task from '../components/Task'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ActionButton from 'react-native-action-button'
+import AddTask from './AddTask'
 
 export default class Agenda extends Component {
     constructor() {
@@ -108,7 +110,8 @@ export default class Agenda extends Component {
                 }
             ],
             visibleTasks: [],
-            showDoneTasks: true
+            showDoneTasks: true,
+            showAddTask: false
         }
     }
     
@@ -118,6 +121,17 @@ export default class Agenda extends Component {
         })
         this.setState({ fontLoaded: true })
         this.filterTasks()
+    }
+
+    addTask = task => {
+        const tasks = [...this.state.tasks]
+        tasks.push({
+            id: Math.random(),
+            desc: task.desc,
+            estimateAt: task.date,
+            doneAt: null
+        })
+        this.setState({ tasks, showAddTask: false }, this.filterTasks)
     }
 
     filterTasks = () => {
@@ -149,6 +163,10 @@ export default class Agenda extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <AddTask
+                    isVisible={this.state.showAddTask}
+                    onSave={this.addTask}
+                    onCancel={() => this.setState({ showAddTask: false })} />
                 <ImageBackground
                     source={todayImage}
                     style={styles.background}>
@@ -178,6 +196,9 @@ export default class Agenda extends Component {
                                 <Task {...item} toggleTask={this.toggleTask} />} />
                     </View>
                 ) : null}
+                <ActionButton
+                    buttonColor={commonStyles.colors.today}
+                    onPress={() => { this.setState({ showAddTask: true }) }} />
             </View>
         )
     }
