@@ -13,7 +13,6 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
 import commonStyles from '../commonStyles'
-import * as Font from 'expo-font'
 import Task from '../components/Task'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ActionButton from 'react-native-action-button'
@@ -23,7 +22,6 @@ export default class Agenda extends Component {
     constructor() {
         super()
         this.state = {
-            fontLoaded: false,
             tasks: [],
             visibleTasks: [],
             showDoneTasks: true,
@@ -32,12 +30,9 @@ export default class Agenda extends Component {
     }
     
     componentDidMount = async () => {
-        await Font.loadAsync({
-            'Lato': require('../../assets/fonts/Lato.ttf')
-        })
         const data = await AsyncStorage.getItem('tasks')
         const tasks = JSON.parse(data) || []
-        this.setState({ tasks, fontLoaded: true }, this.filterTasks)
+        this.setState({ tasks }, this.filterTasks)
     }
 
     addTask = task => {
@@ -101,26 +96,22 @@ export default class Agenda extends Component {
                                 color={commonStyles.colors.secondary} />
                         </TouchableOpacity>
                     </View>
-                    {this.state.fontLoaded ? (
-                        <View style={styles.titleBar}>
-                            <Text style={styles.title}>Hoje</Text>
-                            <Text style={styles.subtitle}>
-                                {moment().locale('pt-br').format('ddd, D [de] MMMM')}
-                            </Text>
-                        </View>
-                    ) : null}
-                </ImageBackground>
-                {this.state.fontLoaded ? (
-                    <View style={styles.taskContainer}>
-                        <FlatList 
-                            data={this.state.visibleTasks}
-                            keyExtractor={item => `${item.id}`}
-                            renderItem={({ item }) =>
-                                <Task {...item}
-                                    onToggleTask={this.toggleTask}
-                                    onDelete={this.deleteTask} />} />
+                    <View style={styles.titleBar}>
+                        <Text style={styles.title}>Hoje</Text>
+                        <Text style={styles.subtitle}>
+                            {moment().locale('pt-br').format('ddd, D [de] MMMM')}
+                        </Text>
                     </View>
-                ) : null}
+                </ImageBackground>
+                <View style={styles.taskContainer}>
+                    <FlatList 
+                        data={this.state.visibleTasks}
+                        keyExtractor={item => `${item.id}`}
+                        renderItem={({ item }) =>
+                            <Task {...item}
+                                onToggleTask={this.toggleTask}
+                                onDelete={this.deleteTask} />} />
+                </View>
                 <ActionButton
                     buttonColor={commonStyles.colors.today}
                     onPress={() => { this.setState({ showAddTask: true }) }} />
