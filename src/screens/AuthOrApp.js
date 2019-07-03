@@ -6,9 +6,14 @@ import {
     StyleSheet,
     AsyncStorage
 } from 'react-native'
+import * as Font from 'expo-font'
 
 export default class AuthOrApp extends Component {
     componentWillMount = async () => {
+        await Font.loadAsync({
+            'Lato': require('../../assets/fonts/Lato.ttf')
+        })
+        
         const json = await AsyncStorage.getItem('userData')
         const userData = JSON.parse(json) || {}
 
@@ -37,4 +42,3 @@ var styles = StyleSheet.create({
         backgroundColor: 'black'
     }
 })
-

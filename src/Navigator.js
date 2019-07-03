@@ -13,7 +13,7 @@ import commonStyles from './commonStyles'
 const MenuRoutes = {
     Today: {
         name: 'Today',
-        screen: props => <Agenda title='hoje' daysAhead={0} {...props} />,
+        screen: props => <Agenda title='Hoje' daysAhead={0} {...props} />,
         navigationOptions: {
             title: 'Hoje'
         }
